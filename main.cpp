@@ -49,7 +49,7 @@ newton(x) = c_1_newton * exp(4 * x) + c_2_newton * exp(-4 * x) + 0.5
 # Plot
 plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
      halve(x) title 'přibližné řešení' with lines linestyle 2, \
-	 newton(x) title 'Newtonova matoda' with lines linestyle 3)"};
+	 newton(x) title 'Newtonova metoda' with lines linestyle 3)"};
 
 	ofstream file{"./solution.gnu"};
 
