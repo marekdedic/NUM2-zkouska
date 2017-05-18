@@ -47,14 +47,14 @@ plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
 	file << head << c_1_exact << line1 << c_2_exact << line2 << c_1_approx << line3 << c_2_approx << tail;
 }
 
-tuple<float, float> halve(float alpha, float beta, float epsilon)
+tuple<float, float> halve(float alpha, float beta, int rounds)
 {
 	function<float(float, float)> c_1{[](float a, float c)->float{return 0.5 * a + 0.125 * c - 0.25;}};
 	function<float(float, float)> c_2{[](float a, float c)->float{return 0.5 * a - 0.125 * c + 0.25;}};
 
 	function<float(float)> F{[alpha, beta, c_1, c_2](float c)->float{return c_1(alpha, c) * exp(2.0 * PI) + c_2(alpha, c) * exp(-2.0 * PI) + 0.5 - beta;}};
 
-	float gamma_left, gamma_right;
+	float gamma, gamma_left, gamma_right;
 
 	for(int i = 0; i < 100000; ++i)
 	{
@@ -73,14 +73,10 @@ tuple<float, float> halve(float alpha, float beta, float epsilon)
 
 	cout << "Půlím..." << endl;
 
-	while(true)
+	for(int i = 0; i < rounds; ++i)
 	{
-		float gamma = 0.5 * (gamma_left + gamma_right);
+		gamma = 0.5 * (gamma_left + gamma_right);
 		float middle = F(gamma);
-		if(abs(middle) < epsilon)
-		{
-			return make_tuple(c_1(alpha, gamma), c_2(alpha, gamma));
-		}
 		if(middle * F(gamma_right) > 0.0)
 		{
 			gamma_right = gamma;
@@ -90,6 +86,7 @@ tuple<float, float> halve(float alpha, float beta, float epsilon)
 			gamma_left = gamma;
 		}
 	}
+	return make_tuple(c_1(alpha, gamma), c_2(alpha, gamma));
 }
 
 int main()
