@@ -56,10 +56,18 @@ plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
 	file << head << c_1_exact << line1 << c_2_exact << line2 << c_1_halve << line3 << c_2_halve << line4 << c_1_newton << line5 << c_2_newton << tail;
 }
 
+tuple<float, float> exact(float alpha, float beta)
+{
+	float c_1{((2.0f * beta - 1.0f) + exp(-2.0f * PI) * (1.0f - 2.0f * alpha)) / (4.0f * sinh(2.0f * PI))};
+	float c_2{alpha - 0.5f - c_1};
+	return make_tuple(c_1, c_2);
+}
+
+
 tuple<float, float> halve(float alpha, float beta, int rounds)
 {
 	function<float(float, float)> c_1{[](float a, float c)->float{return 0.5 * a + 0.125 * c - 0.25;}};
-	function<float(float, float)> c_2{[](float a, float c)->float{return 0.5 * a - 0.125 * c + 0.25;}};
+	function<float(float, float)> c_2{[](float a, float c)->float{return 0.5 * a - 0.125 * c - 0.25;}};
 
 	function<float(float)> F{[alpha, beta, c_1, c_2](float c)->float{return c_1(alpha, c) * exp(2.0 * PI) + c_2(alpha, c) * exp(-2.0 * PI) + 0.5 - beta;}};
 
@@ -101,7 +109,7 @@ tuple<float, float> halve(float alpha, float beta, int rounds)
 tuple<float, float> newton(float alpha, float beta, int rounds)
 {
 	function<float(float, float)> c_1{[](float a, float c)->float{return 0.5 * a + 0.125 * c - 0.25;}};
-	function<float(float, float)> c_2{[](float a, float c)->float{return 0.5 * a - 0.125 * c + 0.25;}};
+	function<float(float, float)> c_2{[](float a, float c)->float{return 0.5 * a - 0.125 * c - 0.25;}};
 
 	function<float(float)> f{[alpha, beta, c_1, c_2](float c)->float{return c_1(alpha, c) * exp(2.0 * PI) + c_2(alpha, c) * exp(-2.0 * PI) + 0.5 - beta;}};
 	function<float(float)> f_der{[](float)->float{return 0.125 * exp(2.0 * PI) - 0.125 * exp(-2.0 * PI);}};
@@ -127,11 +135,9 @@ int main()
 	cout << "Zadejte parametr epsilon: " << endl;
 	cin >> epsilon;
 
-	float c_1_exact{((beta + 0.5f) + exp(-2.0f * PI) * (0.5f - alpha)) / (2.0f * sinh(2.0f * PI))};
-	float c_2_exact{alpha - 0.5f - c_1_exact};
-
+	tuple<float, float> c_exact = exact(alpha, beta);
 	tuple<float, float> c_halve = halve(alpha, beta, epsilon);
 	tuple<float, float> c_newton = newton(alpha, beta, epsilon);
 
-	write_solution(c_1_exact, c_2_exact, get<0>(c_halve), get<1>(c_halve), get<0>(c_newton), get<1>(c_newton));
+	write_solution(get<0>(c_exact), get<1>(c_exact), get<0>(c_halve), get<1>(c_halve), get<0>(c_newton), get<1>(c_newton));
 }
