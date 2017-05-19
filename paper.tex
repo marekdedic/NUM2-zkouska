@@ -1,0 +1,69 @@
+\documentclass[a4paper]{article}
+
+\usepackage{polyglossia}
+\setdefaultlanguage{czech}
+\usepackage[intlimits]{amsmath}
+
+\begin{document}
+
+\section*{Zkouškový příklad NUM2, Marek Dědič}
+
+\subsection*{Zadání}
+Řešte metodou střelby okrajovou úlohu
+\begin{subequations}\label{input}
+	\begin{align}
+		-y'' + 16y = 8 \qquad x \in \left( 0, \frac{\pi}{2} \right) \label{problem} \\
+		y \left( 0 \right) = \alpha \qquad y \left( \frac{\pi}{2} \right) = \beta \label{boundary}
+	\end{align}
+\end{subequations}
+
+\subsection*{Úpravy}
+Rovnice \eqref{problem} je nehomogenní lineární diferenciální rovnice s konstantními koeficienty, jejíž charakteristická rovnice má tvar
+\begin{equation}\label{chareq1}
+	- \lambda^2 + 16 = 0
+\end{equation}
+Tu lze upravit do tvaru
+\begin{equation}\label{chareq2}
+	\left( \lambda + 4 \right) \left( \lambda - 4 \right) = 0
+\end{equation}
+Tedy fundamentální systém řešení \eqref{problem} je \( \left\{ e^{ 4x }, e^{ -4x } \right\} \) a homogenní řešení má tvar
+\begin{equation}\label{homogeneous}
+	y_H = C_1 e^{ 4x } + C_2 e^{ -4x }
+\end{equation}
+Neboť pravá strana \eqref{problem} je konstantní, partikulární řešení lze snadno určit jako
+\begin{equation}\label{particular}
+	y_P = \frac{1}{2}
+\end{equation}
+A tedy obecné řešení \eqref{problem} bude tvaru
+\begin{equation}\label{solution}
+	y = C_1 e^{ 4x } + C_2 e^{ -4x } + \frac{1}{2}
+\end{equation}
+Pro určení koeficientů \( C_1 \) a \( C_2 \) využijeme tří různých přístupů.
+
+\subsection*{Analytické řešení}
+Tvar \eqref{solution} můžeme dosadit přímo do okrajových podmínek \eqref{boundary} a tím dostaneme soustavu
+\begin{align}
+	\begin{split}
+		\alpha &= C_1 + C_2 + \frac{1}{2} \\
+		\beta &= C_1 e^{ 2 \pi } + C_2 e^{ -2 \pi } + \frac{1}{2}
+	\end{split}
+\end{align}
+Kterou lze vyřešit, čímž dostanu analytické řešení \eqref{input} ve tvaru
+\begin{align}
+	\begin{split}
+		C_1 &= \frac{\left( 2 \beta - 1 \right) + e^{ -2 \pi } \left( 1 - 2 \alpha \right)}{4 sinh \left( 2 \pi \right)} \\
+		C_2 &= \alpha - \frac{1}{2} - C_1 \\
+		y &= C_1 e^{ 4x } + C_2 e^{ -4x } + \frac{1}{2}
+	\end{split}
+\end{align}
+
+\subsection*{Metoda střelby}
+Okrajovou úlohu \eqref{input} nahradíme počáteční úlohou tvaru
+\begin{subequations}\label{shoot}
+	\begin{align}
+		-y'' + 16y = 8 \qquad x \in \left( 0, \frac{\pi}{2} \right) \\
+		y \left( 0 \right) = \alpha \qquad y' \left( 0 \right) = \gamma
+	\end{align}
+\end{subequations}
+
+\end{document}
