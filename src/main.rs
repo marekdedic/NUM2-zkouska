@@ -17,10 +17,7 @@ fn main() {
     println!("Zadejte počet iterací: ");
     let rounds = read_int();
 
-    let c_1_exact = ((beta + 0.5) + f32::exp(-2.0 * PI) * (0.5 - alpha)) /
-                    (2.0 * f32::sinh(2.0 * PI));
-    let c_2_exact = alpha - 0.5 - c_1_exact;
-
+    let (c_1_exact, c_2_exact) = exact(alpha, beta);
     let (c_1_halve, c_2_halve) = halve(alpha, beta, rounds);
     let (c_1_newton, c_2_newton) = newton(alpha, beta, rounds);
 
@@ -139,9 +136,17 @@ plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
     file.write_all(tail.as_bytes()).expect(error);
 }
 
+fn exact(alpha: f32, beta: f32) -> (f32, f32) {
+    let c_1 = ((2.0 * beta - 1.0) + f32::exp(-2.0 * PI) * (1.0 - 2.0 * alpha)) /
+              (4.0 * f32::sinh(2.0 * PI));
+    let c_2 = alpha - 0.5 - c_1;
+    (c_1, c_2)
+}
+
+
 fn halve(alpha: f32, beta: f32, rounds: i32) -> (f32, f32) {
     let c_1 = |a: f32, c: f32| -> f32 { 0.5 * a + 0.125 * c - 0.25 };
-    let c_2 = |a: f32, c: f32| -> f32 { 0.5 * a - 0.125 * c + 0.25 };
+    let c_2 = |a: f32, c: f32| -> f32 { 0.5 * a - 0.125 * c - 0.25 };
 
     let f = |c: f32| -> f32 {
         c_1(alpha, c) * f32::exp(2.0 * PI) + c_2(alpha, c) * f32::exp(-2.0 * PI) + 0.5 - beta
@@ -179,7 +184,7 @@ fn halve(alpha: f32, beta: f32, rounds: i32) -> (f32, f32) {
 
 fn newton(alpha: f32, beta: f32, rounds: i32) -> (f32, f32) {
     let c_1 = |a: f32, c: f32| -> f32 { 0.5 * a + 0.125 * c - 0.25 };
-    let c_2 = |a: f32, c: f32| -> f32 { 0.5 * a - 0.125 * c + 0.25 };
+    let c_2 = |a: f32, c: f32| -> f32 { 0.5 * a - 0.125 * c - 0.25 };
 
     let f = |c: f32| -> f32 {
         c_1(alpha, c) * f32::exp(2.0 * PI) + c_2(alpha, c) * f32::exp(-2.0 * PI) + 0.5 - beta
