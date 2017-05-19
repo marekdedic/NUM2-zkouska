@@ -3,6 +3,7 @@
 \usepackage{polyglossia}
 \setdefaultlanguage{czech}
 \usepackage[intlimits]{amsmath}
+\usepackage[top=1in, bottom=1.25in, left=1.25in, right=1.25in]{geometry}
 
 \begin{document}
 
@@ -18,11 +19,11 @@
 \end{subequations}
 
 \subsection*{Úpravy}
-Rovnice \eqref{problem} je nehomogenní lineární diferenciální rovnice s konstantními koeficienty, jejíž charakteristická rovnice má tvar
+Rovnice \eqref{problem} je nehomogenní lineární diferenciální rovnice s konstantními koeficienty. Její charakteristická rovnice má tvar
 \begin{equation}\label{chareq1}
 	- \lambda^2 + 16 = 0
 \end{equation}
-Tu lze upravit do tvaru
+Charakteristickou rovnici lze upravit do tvaru
 \begin{equation}\label{chareq2}
 	\left( \lambda + 4 \right) \left( \lambda - 4 \right) = 0
 \end{equation}
@@ -48,7 +49,7 @@ Tvar \eqref{solution} můžeme dosadit přímo do okrajových podmínek \eqref{b
 		\beta &= C_1 e^{ 2 \pi } + C_2 e^{ -2 \pi } + \frac{1}{2}
 	\end{split}
 \end{align}
-Kterou lze vyřešit, čímž dostanu analytické řešení \eqref{input} ve tvaru
+kterou lze vyřešit, čímž dostaneme analytické řešení \eqref{input} ve tvaru
 \begin{align}
 	\begin{split}
 		C_1 &= \frac{\left( 2 \beta - 1 \right) + e^{ -2 \pi } \left( 1 - 2 \alpha \right)}{4 sinh \left( 2 \pi \right)} \\
@@ -62,8 +63,67 @@ Okrajovou úlohu \eqref{input} nahradíme počáteční úlohou tvaru
 \begin{subequations}\label{shoot}
 	\begin{align}
 		-y'' + 16y = 8 \qquad x \in \left( 0, \frac{\pi}{2} \right) \\
-		y \left( 0 \right) = \alpha \qquad y' \left( 0 \right) = \gamma
+		y \left( 0 \right) = \alpha \qquad y' \left( 0 \right) = \gamma \label{shootBoundary}
 	\end{align}
 \end{subequations}
+Kde zavádíme proměnnou \( \gamma \) a tedy \( y = y \left( x; \gamma \right) \). Pro nějaké \( \gamma^* \) platí
+\begin{equation}
+	y \left( \frac{\pi}{2}; \gamma^* \right) = \beta
+\end{equation}
+Definujeme funkci \( F \left( \gamma \right) \)
+\begin{equation}
+	F \left( \gamma \right) = y \left( \frac{\pi}{2}; \gamma \right) - \beta
+\end{equation}
+pro kterou platí 
+\begin{equation}\label{Feq}
+	F \left( \gamma^* \right) = 0
+\end{equation}
+Tvar \eqref{solution} dosadíme do počátečních podmínek \eqref{shootBoundary}, čímž získáme soustavu
+\begin{align}
+	\begin{split}
+		\alpha &= C_1 + C_2 + \frac{1}{2} \\
+		\gamma &= 4C_1 - 4C_2
+	\end{split}
+\end{align}
+kterou lze upravit do tvaru
+\begin{align}
+	\begin{split}
+		C_1 &= \frac{\alpha}{2} + \frac{\gamma}{8} - \frac{1}{4} \\
+		C_2 &= \frac{\alpha}{2} - \frac{\gamma}{8} - \frac{1}{4}
+	\end{split}
+\end{align}
+Dosadíme \eqref{solution} do \eqref{Feq}, čímž spolu s předcházejícími vztahy dostáváme úlohu
+\begin{align}
+	\begin{split}
+		C_1 \left( \gamma \right) &= \frac{\alpha}{2} + \frac{\gamma}{8} - \frac{1}{4} \\
+		C_2 \left( \gamma \right) &= \frac{\alpha}{2} - \frac{\gamma}{8} - \frac{1}{4} \\
+		F \left( \gamma^* \right) &= C_1 \left( \gamma^* \right) e^{ 2 \pi } + C_2 \left( \gamma^* \right) e^{-2 \pi} + \frac{1}{2} - \beta = 0
+	\end{split}
+\end{align}
+K hledání řešení \( \gamma^* \) můžeme využít dvou přístupů.
+
+\subsubsection*{Metoda půlení intervalu}
+Musíme nalézt počáteční hodnoty \( \gamma_L \) a \( \gamma_R \) takové, aby
+\begin{equation}
+	F \left( \gamma_L \right) F \left( \gamma_R \right) < 0
+\end{equation}
+Poté v každém kroku určíme
+\begin{equation}
+	\gamma_M = \frac{\gamma_L + \gamma_R}{2}
+\end{equation}
+a nahradíme
+\begin{subequations}\label{halve}
+	\begin{align}
+		\gamma_L &= \gamma_M \qquad \text{pokud} \quad F \left( \gamma_L \right) F \left( \gamma_M \right) > 0 \\
+		\gamma_R &= \gamma_M \qquad \text{jinak}
+	\end{align}
+\end{subequations}
+Tím se nám interval \( \left( \gamma_L, \gamma_R \right) \) o polovinu zmenšil. Krok \eqref{halve} opakujeme, dokud nedosáhneme požadované přesnosti.
+
+\subsubsection*{Newtonova metoda}
+Vybereme náhodné \( \gamma^{ \left( 0 \right)} \) a v každém kroku nahradíme
+\begin{equation}
+	\gamma^{ \left( k + 1 \right) } = \gamma^{ \left( k \right) } - \frac{F \left( \gamma^{ \left( k \right) } \right) }{F' \left( \gamma^{ \left( k \right) } \right) }
+\end{equation}
 
 \end{document}
