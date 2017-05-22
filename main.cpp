@@ -48,7 +48,7 @@ halve(x) = c_1_halve * exp(4 * x) + c_2_halve * exp(-4 * x) + 0.5
 newton(x) = c_1_newton * exp(4 * x) + c_2_newton * exp(-4 * x) + 0.5
 # Plot
 plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
-     halve(x) title 'přibližné řešení' with lines linestyle 2, \
+     halve(x) title 'Metoda půlení intervalů' with lines linestyle 2, \
 	 newton(x) title 'Newtonova metoda' with lines linestyle 3)"};
 
 	ofstream file{"./solution.gnu"};
@@ -127,17 +127,17 @@ int main()
 {
 	float alpha;
 	float beta;
-	float epsilon;
+	int rounds;
 	cout << "Zadejte parametr alfa: " << endl;
 	cin >> alpha;
 	cout << "Zadejte parametr beta: " << endl;
 	cin >> beta;
-	cout << "Zadejte parametr epsilon: " << endl;
-	cin >> epsilon;
+	cout << "Zadejte počet iterací: " << endl;
+	cin >> rounds;
 
 	tuple<float, float> c_exact = exact(alpha, beta);
-	tuple<float, float> c_halve = halve(alpha, beta, epsilon);
-	tuple<float, float> c_newton = newton(alpha, beta, epsilon);
+	tuple<float, float> c_halve = halve(alpha, beta, rounds);
+	tuple<float, float> c_newton = newton(alpha, beta, rounds);
 
 	write_solution(get<0>(c_exact), get<1>(c_exact), get<0>(c_halve), get<1>(c_halve), get<0>(c_newton), get<1>(c_newton));
 }
