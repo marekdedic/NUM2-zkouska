@@ -23,7 +23,7 @@ set ylabel 'y'
 # Axes ranges
 set xrange [0:0.5*pi]
 set xtics ('0' 0, 'π/8' 0.125 * pi, 'π/4' 0.25 * pi, '3π/8' 0.375 * pi, 'π/2' 0.5 * pi)
-# Paramters
+# Parameters
 c_1_exact = )"};
 
     string line1{R"(
@@ -47,7 +47,7 @@ exact(x) = c_1_exact * exp(4 * x) + c_2_exact * exp(-4 * x) + 0.5
 halve(x) = c_1_halve * exp(4 * x) + c_2_halve * exp(-4 * x) + 0.5
 newton(x) = c_1_newton * exp(4 * x) + c_2_newton * exp(-4 * x) + 0.5
 # Plot
-plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
+plot exact(x) title 'Analytické řešení' with lines linestyle 1, \
      halve(x) title 'Metoda půlení intervalů' with lines linestyle 2, \
 	 newton(x) title 'Newtonova metoda' with lines linestyle 3)"};
 
