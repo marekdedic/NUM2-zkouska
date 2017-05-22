@@ -56,6 +56,18 @@ plot exact(x) title 'exaktní řešení' with lines linestyle 1, \
 	file << head << c_1_exact << line1 << c_2_exact << line2 << c_1_halve << line3 << c_2_halve << line4 << c_1_newton << line5 << c_2_newton << tail;
 }
 
+void write_sample_solution(string filename, float c_1, float c_2)
+{
+	function<float(float)> y{[c_1, c_2](float x)->float{return c_1 * exp(4.0f * x) + c_2 * exp(-4.0f * x) + 0.5f;}};
+
+	ofstream file{"./" + filename};
+	int samples{100};
+	for(float x{0}; x <= PI/ 2.0f; x+= PI / (2.0f * samples))
+	{
+		file << x << "\t" << y(x) << endl;
+	}
+}
+
 tuple<float, float> exact(float alpha, float beta)
 {
 	float c_1{((2.0f * beta - 1.0f) + exp(-2.0f * PI) * (1.0f - 2.0f * alpha)) / (4.0f * sinh(2.0f * PI))};
@@ -139,5 +151,8 @@ int main()
 	tuple<float, float> c_halve = halve(alpha, beta, rounds);
 	tuple<float, float> c_newton = newton(alpha, beta, rounds);
 
-	write_solution(get<0>(c_exact), get<1>(c_exact), get<0>(c_halve), get<1>(c_halve), get<0>(c_newton), get<1>(c_newton));
+	//write_sample_solution(get<0>(c_exact), get<1>(c_exact), get<0>(c_halve), get<1>(c_halve), get<0>(c_newton), get<1>(c_newton));
+	write_sample_solution("exact.txt", get<0>(c_exact), get<1>(c_exact));
+	write_sample_solution("halve.txt", get<0>(c_halve), get<1>(c_halve));
+	write_sample_solution("newton.txt", get<0>(c_newton), get<1>(c_newton));
 }
